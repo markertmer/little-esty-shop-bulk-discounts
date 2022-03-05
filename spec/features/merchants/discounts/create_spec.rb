@@ -120,6 +120,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
+    expect(page).to_not have_content("6.5%")
     expect(page).to have_content("6%")
   end
 end
