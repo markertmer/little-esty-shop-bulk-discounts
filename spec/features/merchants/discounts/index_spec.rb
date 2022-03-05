@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "merchant discounts index page:", type: :feature do
+RSpec.describe "Merchant Discounts Index:", type: :feature do
   before :each do
     @merchant1 = create(:merchant)
     @discount1 = @merchant1.discounts.create(name: "Just Because", percent: 10, threshold: 7)
