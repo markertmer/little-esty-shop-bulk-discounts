@@ -26,9 +26,15 @@ class Merchants::DiscountsController < ApplicationController
       flash[:alert] = "Error: #{error_message(discount.errors)}"
     end
   end
-end
 
-private
-  def discount_params
-    params.permit(:name, :percent, :threshold)
+  def destroy
+    Discount.find(params[:discount_id]).destroy
+    redirect_to "/merchants/#{params[:merchant_id]}/discounts"
   end
+
+  private
+    def discount_params
+      params.permit(:name, :percent, :threshold)
+    end
+
+end
