@@ -1,0 +1,21 @@
+id,name,percent,threshold,merchant_id
+1,Just Because,5,2,1
+2,IOU,10,4,1
+3,October Surprise,15,6,1
+4,Sweethearts,20,8,1
+5,Desperate 4 Sales,25,10,2
+6,Birth of Savior Day,30,10,2
+7,Investors Report Soon,35,8,2
+8,German Heritage Day,40,6,2
+9,Just For You,45,4,2
+10,Just For Everybody,50,2,2
+11,We Salute U,55,20,3
+12,Buy Our Shit,60,40,3
+13,Nobody Wants This Stuff,65,60,3
+14,U Buy or I Cry,70,80,3
+15,Existential Crisis,75,100,3
+16,Bright Side,80,0,4
+17,Spring Has Sprung!,85,1,4
+18,Why Me? Why Not!,90,100,4
+19,Everything is going to be OK,95,9000,4
+20,Last One of the Year,100,444,4

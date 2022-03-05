@@ -44,7 +44,6 @@ RSpec.describe "merchant discounts index page:", type: :feature do
 
   it "links to each discount's show page" do
     visit "/merchants/#{@merchant1.id}/discounts"
-
     within("#discount-#{@discount1.id}") do
       expect(page).to have_link(@discount1.name)
       click_on(@discount1.name)
