@@ -68,6 +68,17 @@ namespace :csv_load do
     ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{table}_id_seq RESTART WITH #{next_id}")
   end
 
+  task discounts: :environment do
+    Discount.destroy_all
+    CSV.foreach('./db/data/discounts.csv', headers: true) do |row|
+      Discount.create!(row.to_h)
+    end
+
+    table = 'discounts'
+    next_id = 21
+    ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{table}_id_seq RESTART WITH #{next_id}")
+  end
+
   task :all do
     tables = [:customers, :merchants, :invoices, :items, :invoice_items, :transactions]
     tables.each do |table|
