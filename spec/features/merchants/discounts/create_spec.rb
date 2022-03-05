@@ -3,11 +3,6 @@ require 'rails_helper'
 RSpec.describe "Creating Discounts:", type: :feature do
   before :each do
     @merchant1 = create(:merchant)
-    @discount1 = @merchant1.discounts.create(name: "Just Because", percent: 10, threshold: 7)
-    @discount2 = @merchant1.discounts.create(name: "For You", percent: 5, threshold: 3)
-    @discount3 = @merchant1.discounts.create(name: "October Surprise", percent: 12, threshold: 7)
-    @merchant2 = create(:merchant)
-    @discount4 = @merchant2.discounts.create(name: "Birth Of Our Savior Day", percent: 15, threshold: 20)
   end
 
   it 'link to update from the index page' do
