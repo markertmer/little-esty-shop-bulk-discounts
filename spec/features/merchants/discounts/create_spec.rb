@@ -12,7 +12,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
 
   it 'link to update from the index page' do
     visit "/merchants/#{@merchant1.id}/discounts"
-    click_button("Make a New Discount")
+    click_link("Make a New Discount")
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
   end
 
@@ -37,7 +37,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Name can't be blank, Percent can't be blank, Percent is not a number, Threshold can't be blank, Threshold is not a number")
   end
 
   it 'sad path: one thing blank' do
@@ -48,7 +48,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Threshold can't be blank, Threshold is not a number")
   end
 
   it 'sad path: percent too high' do
@@ -60,7 +60,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Percent must be less than or equal to 100")
 
   end
 
@@ -73,7 +73,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Percent must be greater than or equal to 0")
 
     fill_in("Name", with: "Baby Jesus Sale")
     fill_in("Percent", with: "16")
@@ -81,7 +81,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Threshold must be greater than or equal to 0")
   end
 
   it 'sad paths: non-numericals' do
@@ -93,7 +93,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Percent is not a number")
 
     fill_in("Name", with: "Baby Jesus Sale")
     fill_in("Percent", with: "15")
@@ -101,7 +101,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Threshold is not a number")
   end
 
   it 'sad path: submitting decimals for threshold' do
@@ -113,18 +113,18 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(page).to have_content("Error: Threshold must be an integer")
   end
 
-  it 'edge case: submitting decimals for percent' do
+  it 'edge case: decimals not accepted for percent' do
     visit "/merchants/#{@merchant1.id}/discounts/new"
 
     fill_in("Name", with: "Baby Jesus Sale")
-    fill_in("Percent", with: "6.66")
+    fill_in("Percent", with: "6.5")
     fill_in("Threshold", with: "666")
     click_button("Submit")
 
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: XXXXXX")
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
+    expect(page).to have_content("6%")
   end
 end
