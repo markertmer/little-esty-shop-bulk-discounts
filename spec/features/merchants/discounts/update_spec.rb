@@ -75,10 +75,6 @@ RSpec.describe "Updating Discounts:", type: :feature do
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Name can't be blank, Percent can't be blank, Percent is not a number, Threshold can't be blank, Threshold is not a number")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'sad path: one thing blank' do
@@ -90,10 +86,6 @@ RSpec.describe "Updating Discounts:", type: :feature do
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Threshold can't be blank, Threshold is not a number")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'sad path: percent too high' do
@@ -106,10 +98,6 @@ RSpec.describe "Updating Discounts:", type: :feature do
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Percent must be less than or equal to 100")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'sad paths: no negative numbers accepted' do
@@ -122,19 +110,11 @@ RSpec.describe "Updating Discounts:", type: :feature do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Percent must be greater than or equal to 0")
 
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
-
     fill_in("Threshold", with: "-20")
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Threshold must be greater than or equal to 0")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'sad paths: non-numericals' do
@@ -148,10 +128,6 @@ RSpec.describe "Updating Discounts:", type: :feature do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Percent is not a number")
 
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
-
     fill_in("Name", with: "Baby Jesus Sale")
     fill_in("Percent", with: "15")
     fill_in("Threshold", with: "Jeff")
@@ -159,10 +135,6 @@ RSpec.describe "Updating Discounts:", type: :feature do
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Threshold is not a number")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'sad path: submitting decimals for threshold' do
@@ -175,10 +147,6 @@ RSpec.describe "Updating Discounts:", type: :feature do
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
     expect(page).to have_content("Error: Threshold must be an integer")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'edge case: decimals not accepted for percent' do
@@ -189,13 +157,9 @@ RSpec.describe "Updating Discounts:", type: :feature do
     fill_in("Threshold", with: "666")
     click_button("Submit")
 
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}/edit")
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}")
     expect(page).to_not have_content("6.5%")
     expect(page).to have_content("6%")
-
-    expect(page).to have_content("Just Because")
-    expect(page).to have_content("10%")
-    expect(page).to have_content("7")
   end
 
   it 'edge case: making no changes' do
