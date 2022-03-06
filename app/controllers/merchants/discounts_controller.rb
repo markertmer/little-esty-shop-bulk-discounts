@@ -7,7 +7,6 @@ class Merchants::DiscountsController < ApplicationController
   end
 
   def show
-    # binding.pry
     @merchant = Merchant.find(params[:merchant_id])
     @discount = Discount.find(params[:discount_id])
   end
