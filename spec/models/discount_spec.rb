@@ -12,7 +12,7 @@ RSpec.describe Discount, type: :model do
 
     it { should validate_numericality_of(:percent).is_greater_than_or_equal_to(0) }
     it { should validate_numericality_of(:percent).is_less_than_or_equal_to(100) }
-    it { should validate_numericality_of(:threshold).is_greater_than_or_equal_to(0) }
+    it { should validate_numericality_of(:threshold).is_greater_than(0) }
     it { should validate_numericality_of(:threshold).only_integer }
   end
 end

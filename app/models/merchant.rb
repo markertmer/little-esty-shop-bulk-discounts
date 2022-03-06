@@ -70,4 +70,7 @@ class Merchant < ApplicationRecord
     .where("invoices.id = #{invoice_id}")
     .sum('invoice_items.quantity * invoice_items.unit_price')
   end
+
+  def discounted_invoice_revenue
+  end
 end
