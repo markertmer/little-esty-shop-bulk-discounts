@@ -3,6 +3,7 @@ class Merchants::DiscountsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:id])
     @discounts = @merchant.discounts
+    @next_3_holidays = HolidaySearch.new.next_3
   end
 
   def show
