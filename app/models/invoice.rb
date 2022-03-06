@@ -11,7 +11,8 @@ class Invoice < ApplicationRecord
 
 
   def total_revenue
-    self.items.sum(:unit_price)
+    #self.items.sum(:unit_price)
+    invoice_items.sum('unit_price * quantity')
   end
 
   def format_date

@@ -87,6 +87,6 @@ RSpec.describe 'Shows 1 invoice, and all its attributes', type: :feature do
   it " test for the total amount of the invoice." do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
 
-    expect(page).to have_content("Total amount due on Marky's invoice: $125")
+    expect(page).to have_content("Total amount due on Marky's invoice: $250")
   end
 end
