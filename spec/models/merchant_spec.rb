@@ -323,4 +323,31 @@ RSpec.describe Merchant, type: :model do
     actual_transaction_counts = merchant1.favorite_customers.map { |customer| customer.transaction_count }
     expect(expected_transaction_counts).to eq(actual_transaction_counts)
   end
+
+  it 'invoice_revenue' do
+    # the protagonist!
+    merchant1 = Merchant.create!(name: "The Tornado", status: 1)
+    item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
+    item2 = merchant1.items.create!(name: "FunPants", description: "Cha + 20", unit_price: 2000)
+    item3 = merchant1.items.create!(name: "FunPants", description: "Cha + 20", unit_price: 2000)
+    # this merchant will also have items on a shared invoice
+    merchant2 = Merchant.create!(name: "The Mornado", status: 1)
+    item4 = merchant2.items.create!(name: "FitPants", description: "Con + 20", unit_price: 150)
+    # scenario 1 - one item on the invoice
+    customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
+    invoice1 = customer1.invoices.create!(status: 0)
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
+    #scenario 2 - multiple items from merchant1 on the invoice, plus an item from merchant2 which should not count toward merchant1's revenue (and vice-versa)
+    customer2 = Customer.create!(first_name: "Jarky", last_name: "Jark")
+    invoice2 = customer2.invoices.create!(status: 0)
+    InvoiceItem.create!(invoice_id: invoice2.id, item_id: item2.id, quantity: 1, unit_price: 2000, status: 0)
+    InvoiceItem.create!(invoice_id: invoice2.id, item_id: item3.id, quantity: 4, unit_price: 70, status: 0)
+    InvoiceItem.create!(invoice_id: invoice2.id, item_id: item4.id, quantity: 3, unit_price: 150, status: 0)
+
+    expect(merchant1.invoice_revenue(invoice1.id)).to eq(240)
+
+    expect(merchant1.invoice_revenue(invoice2.id)).to eq(2280)
+
+    expect(merchant2.invoice_revenue(invoice2.id)).to eq(450)
+  end
 end

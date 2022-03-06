@@ -64,4 +64,10 @@ class Merchant < ApplicationRecord
     .order('invoices.created_at desc')
     .first&.created_at&.strftime("%A, %B %d, %Y")
   end
+
+  def invoice_revenue(invoice_id)
+    invoice_items.joins(:item, :invoice)
+    .where("invoices.id = #{invoice_id}")
+    .sum('invoice_items.quantity * invoice_items.unit_price')
+  end
 end

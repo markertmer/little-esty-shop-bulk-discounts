@@ -6,7 +6,7 @@ class Invoice < ApplicationRecord
   has_many :merchants, through: :items
 
   validates_presence_of :status
-
+ 
   enum status: { "in progress" => 0, "cancelled" => 1, "completed" => 2 }
 
 
