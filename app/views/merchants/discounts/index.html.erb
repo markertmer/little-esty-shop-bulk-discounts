@@ -1,6 +1,6 @@
 <h1>My Bulk Discounts</h1>
 
-<table>
+<table id="discounts-info">
   <tr>
     <th></th>
     <th>Name</th>
@@ -17,6 +17,9 @@
   <% end %>
 </table>
 
-<br>
+<h2>Upcoming Holidays</h2>
+<% @next_3_holidays.each do |holiday| %>
+  <p><%= holiday.name.upcase %>: <%= holiday.date %></p>
+<% end %>
 
 <%= link_to "Make a New Discount", "/merchants/#{@merchant.id}/discounts/new" %>

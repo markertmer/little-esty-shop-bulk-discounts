@@ -38,6 +38,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'bootstrap', '~> 4.3.1'
 
+gem 'httparty'
+
 gem 'jquery-rails'
 gem 'simple_form'
 gem 'popper_js'

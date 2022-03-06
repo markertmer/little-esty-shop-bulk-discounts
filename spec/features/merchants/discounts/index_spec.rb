@@ -37,9 +37,11 @@ RSpec.describe "Merchant Discounts Index:", type: :feature do
       expect(page).to have_content(@discount3.threshold)
     end
 
-    expect(page).to_not have_content(@discount4.name)
-    expect(page).to_not have_content(@discount4.percent)
-    expect(page).to_not have_content(@discount4.threshold)
+    within("#discounts-info") do
+      expect(page).to_not have_content(@discount4.name)
+      expect(page).to_not have_content("#{@discount4.percent}%")
+      expect(page).to_not have_content(@discount4.threshold)
+    end
   end
 
   it "links to each discount's show page" do
@@ -49,5 +51,13 @@ RSpec.describe "Merchant Discounts Index:", type: :feature do
       click_on(@discount1.name)
       expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/#{@discount1.id}")
     end
+  end
+
+  it "shows the next 3 upcoming holidays" do #This test is not future-proof!!!!!!!!
+    visit "/merchants/#{@merchant1.id}/discounts"
+
+    expect(page).to have_content("GOOD FRIDAY: 2022-04-15")
+    expect(page).to have_content("MEMORIAL DAY: 2022-05-30")
+    expect(page).to have_content("JUNETEENTH: 2022-06-20")
   end
 end
