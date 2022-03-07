@@ -87,6 +87,37 @@ RSpec.describe 'Shows 1 invoice, and all its attributes', type: :feature do
   it " test for the total amount of the invoice." do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
 
-    expect(page).to have_content("Total amount due on Marky's invoice: $250")
+    expect(page).to have_content("Invoice Total: $250")
+  end
+
+  it 'displays total revenue and discounted revenue' do
+    merchant1 = Merchant.create!(name: "The Tornado", status: 1)
+    merchant2 = Merchant.create!(name: "Whatevvzerzzz", status: 1)
+    discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
+    item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
+    item2 = merchant2.items.create!(name: "ShartPants", description: "IQ + 20", unit_price: 70)
+    customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
+    invoice1 = customer1.invoices.create!(status: 0)
+    # item1 does not meet threshold, discount does not apply to item2
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 9, unit_price: 70, status: 0)
+
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+
+    expect(page).to have_content("Invoice Total: $870")
+    expect(page).to have_content("Merchant Total: $240")
+    expect(page).to have_content("Merchant Amount Due after bulk discounts: $240")
+    # item1 equals threshold for discount1 after adding 3 more, discount does not apply to item2
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+    expect(page).to have_content("Invoice Total: $1230")
+    expect(page).to have_content("Merchant Total: $600")
+    expect(page).to have_content("Merchant Amount Due after bulk discounts: $540")
+    # item1 exceeds threshold for discount1 after adding 5 more, discount does not apply to item2
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 5, unit_price: 120, status: 0)
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+    expect(page).to have_content("Invoice Total: $1830")
+    expect(page).to have_content("Merchant Total: $1200")
+    expect(page).to have_content("Merchant Amount Due after bulk discounts: $1080")
   end
 end
