@@ -17,6 +17,7 @@ RSpec.describe Invoice, type: :model do
       it { should have_many(:invoice_items)}
       it { should have_many(:items).through(:invoice_items)}
       it { should have_many(:transactions)}
+      it { should have_many(:merchants).through(:items)}
     end
 
     it "tests the total_revenue" do
@@ -26,7 +27,7 @@ RSpec.describe Invoice, type: :model do
       @invoice1 = @customer1.invoices.create!(status: 1)
       @invoice_item1 = InvoiceItem.create!(invoice_id: @invoice1.id, item_id: @item1.id, quantity: 2, unit_price: 125, status: 1)
 
-      expect(@invoice1.total_revenue).to eq(125)
+      expect(@invoice1.total_revenue).to eq(250)
     end
 
     it "formats the created_at date" do

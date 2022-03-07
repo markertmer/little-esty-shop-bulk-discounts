@@ -18,8 +18,10 @@
   <%= form_with url: "/merchants/#{@merchant.id}/invoices/#{@invoice.id}?invoice_item=#{invoice_item.id}", method: :patch, local: true do |form|%>
       <%=form.select :status, ['pending', 'shipped', 'packaged'], selected: invoice_item.status %>
       <%= form.submit "Update Item Status" %>
-<% end %>
-
+  <% end %>
 <%end%></div><br>
-<h3> Total amount due on <%="#{@invoice.customer.first_name}"%>'s invoice: $<%= "#{@invoice.total_revenue}"%>
+
+<h3>Invoice Total: $<%= "#{@invoice.total_revenue}" %></h3>
+<h3>Merchant Total: $<%= @merchant.invoice_revenue(@invoice.id) %></h3>
+<h3>Merchant Amount Due after bulk discounts: $<%= @merchant.discounted_invoice_revenue(@invoice.id) %></h3>
   </div>

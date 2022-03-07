@@ -64,4 +64,36 @@ class Merchant < ApplicationRecord
     .order('invoices.created_at desc')
     .first&.created_at&.strftime("%A, %B %d, %Y")
   end
+
+  def invoice_revenue(invoice_id)
+    invoice_items.joins(:item, :invoice)
+    .where("invoices.id = #{invoice_id}")
+    .sum('invoice_items.quantity * invoice_items.unit_price')
+  end
+
+  def discounted_invoice_revenue(invoice_id)
+    potential_discounts = items.joins(:discounts, :invoice_items)
+    .where("invoice_items.invoice_id = #{invoice_id}")
+    .select('invoice_items.item_id, discounts.percent, discounts.threshold, invoice_items.unit_price, sum(invoice_items.quantity) as total')
+    .group('invoice_items.item_id, discounts.percent, discounts.threshold, invoice_items.unit_price')
+    .order(total: :desc)
+
+    invoice_revenue(invoice_id) - final_discount(potential_discounts)
+  end
+
+  def final_discount(potential_discounts)
+    discounts = Hash.new(0)
+
+    potential_discounts.each do |data|
+      next if data.percent == nil
+
+      item_discount = (data.total * data.unit_price * data.percent.to_f / 100)
+
+      if data.total >= data.threshold && item_discount > discounts[data.item_id]
+        discounts[data.item_id] = item_discount
+      end
+    end
+
+    discounts.values.sum
+  end
 end

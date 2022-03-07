@@ -3,14 +3,16 @@ class Invoice < ApplicationRecord
   has_many :transactions
   has_many :invoice_items
   has_many :items, through: :invoice_items
+  has_many :merchants, through: :items
 
   validates_presence_of :status
-
+ 
   enum status: { "in progress" => 0, "cancelled" => 1, "completed" => 2 }
 
 
   def total_revenue
-    self.items.sum(:unit_price)
+    #self.items.sum(:unit_price)
+    invoice_items.sum('unit_price * quantity')
   end
 
   def format_date

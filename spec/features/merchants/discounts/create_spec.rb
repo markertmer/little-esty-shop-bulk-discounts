@@ -76,7 +76,7 @@ RSpec.describe "Creating Discounts:", type: :feature do
     click_button("Submit")
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
-    expect(page).to have_content("Error: Threshold must be greater than or equal to 0")
+    expect(page).to have_content("Error: Threshold must be greater than 0")
   end
 
   it 'sad paths: non-numericals' do
