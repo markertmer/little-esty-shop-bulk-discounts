@@ -359,16 +359,26 @@ RSpec.describe Merchant, type: :model do
     invoice1 = customer1.invoices.create!(status: 0)
     # does not meet threshold for discount
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
-    # expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(240)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(240)
     # equals threshold after adding 3 more
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
-    # expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
     # same discount after exceeding threshold
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 5, unit_price: 120, status: 0)
     expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1080)
   end
 
-  xit 'discounted_invoice_revenue: 1 discount, 2 items' do
+  it 'discounted_invoice_revenue: 0 discounts, 1 item' do
+    merchant1 = Merchant.create!(name: "The Tornado", status: 1)
+    item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
+    customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
+    invoice1 = customer1.invoices.create!(status: 0)
+    # no discount results in full price
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 5, unit_price: 120, status: 0)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(600)
+  end
+
+  it 'discounted_invoice_revenue: 1 discount, 2 items' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
     item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
@@ -387,7 +397,7 @@ RSpec.describe Merchant, type: :model do
     expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1107)
   end
 
-  xit 'discounted_invoice_revenue: 2 discounts, 2 items' do
+  it 'discounted_invoice_revenue: 2 discounts, 2 items' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
     discount2 = merchant1.discounts.create!(name: "For Gary", percent: 20, threshold: 10)
@@ -412,7 +422,7 @@ RSpec.describe Merchant, type: :model do
     expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1856)
   end
 
-  xit 'discounted_invoice_revenue: 2 merchants, 1 discount' do
+  it 'discounted_invoice_revenue: 2 merchants, 1 discount' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     merchant2 = Merchant.create!(name: "Whatevvzerzzz", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
@@ -423,16 +433,19 @@ RSpec.describe Merchant, type: :model do
     # item1 does not meet threshold, discount does not apply to item2
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 9, unit_price: 70, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(870)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(240)
+    expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(630)
     # item1 equals threshold for discount1 after adding 3 more, discount does not apply to item2
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1170)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
+    expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(630)
     # item1 exceeds threshold for discount1 after adding 4 more, discount does not apply to item2
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 5, unit_price: 120, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1710)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1080)
+    expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(630)
   end
 
-  xit 'discounted_invoice_revenue: 2 merchants, 2 discounts' do
+  it 'discounted_invoice_revenue: 2 merchants, 2 discounts' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
     item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
@@ -446,16 +459,19 @@ RSpec.describe Merchant, type: :model do
     # neither item meets their threshold, no discounts
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 6, unit_price: 70, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(660)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(240)
+    expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(420)
     # item1 gets discount1 after adding 3 more
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(960)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
+    expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(420)
     # item2 gets discount2 after adding 2 more
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 2, unit_price: 70, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1032.80)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
+    expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(492.80)
   end
 
-  xit 'discounted_invoice_revenue: better deal: 2 discounts, 1 item' do
+  it 'discounted_invoice_revenue: better deal: 2 discounts, 1 item' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
     discount2 = merchant1.discounts.create!(name: "For Greg", percent: 15, threshold: 10)
@@ -465,12 +481,12 @@ RSpec.describe Merchant, type: :model do
     # meets threshold for 10% discount
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 6, unit_price: 120, status: 0)
     expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(648)
-    # exceeds threshold for 20% discount
+    # exceeds threshold for 15% discount
     InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 13, unit_price: 120, status: 0)
-    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1248)
+    expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(1938)
   end
 
-  xit 'discounted_invoice_revenue: better deal: 2 discounts with same threshold' do
+  it 'discounted_invoice_revenue: better deal: 2 discounts with same threshold' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
     discount2 = merchant1.discounts.create!(name: "For Greg", percent: 15, threshold: 5)
