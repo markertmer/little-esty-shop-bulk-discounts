@@ -71,6 +71,42 @@ class Merchant < ApplicationRecord
     .sum('invoice_items.quantity * invoice_items.unit_price')
   end
 
-  def discounted_invoice_revenue
+  def dddddiscounted_invoice_revenue(invoice_id)
+    possible_discounts = Merchant.joins(:discounts, items: :invoices)
+                          .where("merchants.id = #{self.id} and invoices.id = #{invoice_id} and sum(invoice_items.quantity) >= discounts.threshold")
+                          .select('discounts.*, sum(invoice_items.quantity)')
+                          .group('invoice_items.item_id')
+                          binding.pry
+    if possible_discounts.empty?
+      discount = 0
+    else
+      discount = get_discount(possible_discounts)
+    end
+    invoice_revenue(invoice_id) - discount
+  end
+
+  def ggggget_discount(possible_discounts)
+    possible_discounts
+    # .select('invoice_items.quantity * invoice_items.unit_price * (1 - discounts.percent / 100) as discounted_rev')
+    .select('count * invoice_items.unit_price * (1 - discounts.percent / 100) as discounted_rev')
+    .order('discounted_rev')
+    .first
+    .discounted_rev
+  end
+
+  def discounted_invoice_revenue(invoice_id)
+    possible_discounts = Merchant.joins(:discounts, items: :invoices)
+    .where("merchants.id = #{self.id} and invoices.id = #{invoice_id}")
+    .select("discounts.*, sum(invoice_items.quantity) * invoice_items.unit_price * (1 - discounts.percent / 100) as discounted_rev")
+    .group('invoice_items.item_id, invoice_items.unit_price, discounts.percent')
+    .order('discounted_rev') #.first.discounted_rev
+    # binding.pry
   end
 end
+
+    # Merchant.joins(:discounts, items: :invoices)
+    # .where("merchants.id = #{self.id} and invoices.id = #{invoice_id} and invoice_items.quantity >= discounts.threshold")
+    # .select('invoice_items.quantity * invoice_items.unit_price * (1 - discounts.percent / 100) as discounted_rev')
+    # .order('discounted_rev')
+    # .first
+    # .discounted_rev
