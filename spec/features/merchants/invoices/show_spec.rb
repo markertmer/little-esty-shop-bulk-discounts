@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Shows 1 invoice, and all its attributes', type: :feature do
+RSpec.describe 'Merchant Invoice Show Page:', type: :feature do
   before do
     @merchant1 = Merchant.create!(name: "The Tornado")
     @item1 = @merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 125)
@@ -119,5 +119,43 @@ RSpec.describe 'Shows 1 invoice, and all its attributes', type: :feature do
     expect(page).to have_content("Invoice Total: $1830")
     expect(page).to have_content("Merchant Total: $1200")
     expect(page).to have_content("Merchant Amount Due after bulk discounts: $1080")
+  end
+
+  it 'gives links to each applied discount' do
+    merchant1 = Merchant.create!(name: "The Tornado", status: 1)
+    discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
+    discount2 = merchant1.discounts.create!(name: "For Gary", percent: 20, threshold: 10)
+    item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
+    item2 = merchant1.items.create!(name: "ShartPants", description: "IQ + 20", unit_price: 70)
+    customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
+    invoice1 = customer1.invoices.create!(status: 0)
+    # neither item meets threshold
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 4, unit_price: 70, status: 0)
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+    expect(page).to_not have_content(discount1.name)
+    expect(page).to_not have_content(discount2.name)
+    # item 1 meets discount 1 threshold
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+    expect(page).to have_content(discount1.name)
+    expect(page).to_not have_content(discount2.name)
+    # item 2 exceeds discount 2 threshold
+    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 10, unit_price: 70, status: 0)
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+    expect(page).to have_content(discount1.name)
+    expect(page).to have_content(discount2.name)
+
+    within("#discount-#{discount1.id}") do
+      click_link(discount1.name)
+      expect(current_path).to eq("/merchants/#{merchant1.id}/discounts/#{discount1.id}")
+    end
+
+    visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
+
+    within("#discount-#{discount2.id}") do
+      click_link(discount2.name)
+      expect(current_path).to eq("/merchants/#{merchant1.id}/discounts/#{discount2.id}")
+    end
   end
 end
