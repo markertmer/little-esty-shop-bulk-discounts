@@ -112,22 +112,19 @@ RSpec.describe Invoice, type: :model do
 
       customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
       invoice1 = customer1.invoices.create!(status: 0)
-      # neither item meets their threshold, no discounts
       ii1 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
       ii2 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 6, unit_price: 70, status: 0)
-      expect(invoice1.discounted_revenue).to eq(660)
-      # expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(240)
-      # expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(420)
-      # item1 gets discount1 after adding 3 more
+
+      # neither item meets their threshold, no discounts
+      expect(invoice1.discounted_revenue).to eq(660) # 2*120 + 6*70 = 240 + 420
+
       ii1.update(quantity: 5)
-      expect(invoice1.discounted_revenue).to eq(960)
-      # expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
-      # expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(420)
-      # item2 gets discount2 after adding 2 more
+      # item1 gets discount1 after adding 3 more
+      expect(invoice1.discounted_revenue).to eq(960) # 0.9(5*120) + 6*70 = 540 + 420
+
       ii2.update(quantity: 8)
-      expect(invoice1.discounted_revenue).to eq(1033) #actually 1032.8, no float handling
-      # expect(merchant1.discounted_invoice_revenue(invoice1.id)).to eq(540)
-      # expect(merchant2.discounted_invoice_revenue(invoice1.id)).to eq(493) # actually 492.8, no functionality for floats yet.
+      # item2 gets discount2 after adding 2 more
+      expect(invoice1.discounted_revenue).to eq(1033) # 0.9(5*120) + 0.88(8*70) = 540 + 492.8 = 1032.8, no float handling
     end
   end
 end
