@@ -119,4 +119,18 @@ class Merchant < ApplicationRecord
     invoice_revenue(invoice_id) - discounts.values.sum
   end
 
+  def applied_discounts(invoice_id)
+    discounts = Hash.new(0)
+
+    discount_data(invoice_id).each do |data|
+      if data.savings > discounts[data.item_id][0]
+        discounts[data.item_id] = [data.savings, data.id]
+      end
+    end
+
+    discounts.map do |key, value|
+      Discount.find(value[1])
+    end.uniq
+  end
+
 end

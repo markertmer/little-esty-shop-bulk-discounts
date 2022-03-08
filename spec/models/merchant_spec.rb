@@ -499,7 +499,27 @@ RSpec.describe Merchant, type: :model do
   end
 
   it 'finds the applied discounts' do
-
+    merchant1 = Merchant.create!(name: "The Tornado", status: 1)
+    discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
+    discount2 = merchant1.discounts.create!(name: "For Gary", percent: 20, threshold: 10)
+    item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
+    item2 = merchant1.items.create!(name: "ShartPants", description: "IQ + 20", unit_price: 70)
+    customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
+    invoice1 = customer1.invoices.create!(status: 0)
+    # neither item meets the threshold for either discount
+    ii1 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
+    ii2 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 4, unit_price: 70, status: 0)
+    expect(merchant1.applied_discounts(invoice1.id)).to eq([])
+    # item1 equals threshold for discount1 after adding 3 more
+    ii1.update(quantity: 5)
+    expect(merchant1.applied_discounts(invoice1.id)).to eq([discount1])
+    # item1 equals threshold for discount2 after adding 5 more (960)
+    # item2 exceeds threshold for discount1 after adding 4 more (504)
+    ii1.update(quantity: 10)
+    ii2.update(quantity: 8)
+    expect(merchant1.applied_discounts(invoice1.id)).to eq([discount2, discount1])
+    # item2 exceeds threshold for discount2 after adding 8 more (896)
+    ii2.update(quantity: 16)
+    expect(merchant1.applied_discounts(invoice1.id)).to eq([discount2])
   end
-
 end
