@@ -24,6 +24,7 @@
       <li>Item status: <%= item.status %></li></p>
       <%end%>
     </ul>
-  <h3> Bill <%="#{@invoice.customer.first_name}"%><br> $<%= "#{@invoice.total_revenue}"%>
+  <h3>Subtotal: $<%= @invoice.total_revenue %></h3>
+  <h3>Total Discounted Revenue: $<%= @invoice.discounted_revenue %></h3>
 </div>
 </div>

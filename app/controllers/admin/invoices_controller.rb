@@ -4,7 +4,6 @@ class Admin::InvoicesController < ApplicationController
   end
 
   def show
-
     @invoice = Invoice.find(params[:invoice_id])
     @inv_items = @invoice.items
   end
@@ -14,5 +13,4 @@ class Admin::InvoicesController < ApplicationController
     @invoice.update(status: params[:status])
     redirect_to "/admin/invoices/#{params[:id]}"
   end
-
 end

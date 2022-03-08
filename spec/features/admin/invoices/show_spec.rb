@@ -64,7 +64,7 @@ RSpec.describe 'Invoices', type: :feature do
   it " test for the total amount of the invoice." do
     visit "/admin/invoices/#{@invoice1.id}"
 
-    expect(page).to have_content("Bill Marky $4250")
+    expect(page).to have_content("Subtotal: $4250")
   end
 
   it "can update status via dropdown menu's" do
@@ -99,5 +99,34 @@ RSpec.describe 'Invoices', type: :feature do
       expect(page).to_not have_content("Invoice Status: in progress")
       expect(page).to_not have_content("Invoice Status: cancelled")
     end
+  end
+
+  it 'gives the total discounted revenue' do
+    merchant1 = Merchant.create!(name: "The Tornado", status: 1)
+    discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
+    item1 = merchant1.items.create!(name: "SmartPants", description: "IQ + 20", unit_price: 120)
+
+    merchant2 = Merchant.create!(name: "Whatevvzerzzz", status: 1)
+    discount2 = merchant2.discounts.create!(name: "For Darren", percent: 12, threshold: 7)
+    item2 = merchant2.items.create!(name: "ShartPants", description: "IQ + 20", unit_price: 70)
+
+    customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
+    invoice1 = customer1.invoices.create!(status: 0)
+
+    # neither item meets their threshold, no discounts
+    ii1 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
+    ii2 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 6, unit_price: 70, status: 0)
+    visit "/admin/invoices/#{invoice1.id}"
+    expect(page).to have_content("Total Discounted Revenue: $660") # 2*120 + 6*70 = 240 + 420
+
+    # item1 gets discount1 after adding 3 more
+    ii1.update(quantity: 5)
+    visit "/admin/invoices/#{invoice1.id}"
+    expect(page).to have_content("Total Discounted Revenue: $960") # 0.9(5*120) + 6*70 = 540 + 420
+
+    # item2 gets discount2 after adding 2 more
+    ii2.update(quantity: 8)
+    visit "/admin/invoices/#{invoice1.id}"
+    expect(page).to have_content("Total Discounted Revenue: $1033") # 0.9(5*120) + 0.88(8*70) = 540 + 492.8 = 1032.8, no float handling
   end
 end
