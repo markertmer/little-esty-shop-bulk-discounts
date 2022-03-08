@@ -6,7 +6,7 @@ class Invoice < ApplicationRecord
   has_many :merchants, through: :items
 
   validates_presence_of :status
- 
+
   enum status: { "in progress" => 0, "cancelled" => 1, "completed" => 2 }
 
 
@@ -22,5 +22,11 @@ class Invoice < ApplicationRecord
   def self.incomplete
     # Invoice.where.not(status: 1).joins(:invoice_items).where.not(status: 2).group("invoices.id")
     where(status: 0).order(:created_at)
+  end
+
+  def discounted_revenue
+    self.merchants.sum do |merchant|
+      merchant.discounted_invoice_revenue(self.id)
+    end
   end
 end
