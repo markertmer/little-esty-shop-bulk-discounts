@@ -71,15 +71,15 @@ class Merchant < ApplicationRecord
     .sum('invoice_items.quantity * invoice_items.unit_price')
   end
 
-  def discounted_invoice_revenue(invoice_id)
-    potential_discounts = items.joins(:discounts, :invoice_items)
-    .where("invoice_items.invoice_id = #{invoice_id}")
-    .select('invoice_items.item_id, discounts.percent, discounts.threshold, invoice_items.unit_price, sum(invoice_items.quantity) as total')
-    .group('invoice_items.item_id, discounts.percent, discounts.threshold, invoice_items.unit_price')
-    .order(total: :desc)
-
-    invoice_revenue(invoice_id) - final_discount(potential_discounts)
-  end
+  # def discounted_invoice_revenue(invoice_id)
+  #   potential_discounts = items.joins(:discounts, :invoice_items)
+  #   .where("invoice_items.invoice_id = #{invoice_id}")
+  #   .select('invoice_items.item_id, discounts.percent, discounts.threshold, invoice_items.unit_price, sum(invoice_items.quantity) as total')
+  #   .group('invoice_items.item_id, discounts.percent, discounts.threshold, invoice_items.unit_price')
+  #   .order(total: :desc)
+  #
+  #   invoice_revenue(invoice_id) - final_discount(potential_discounts)
+  # end
 
   def final_discount(potential_discounts)
     discounts = Hash.new(0)
@@ -96,4 +96,27 @@ class Merchant < ApplicationRecord
 
     discounts.values.sum
   end
+
+  def discount_data(invoice_id)
+    invoice_items.joins(item: :discounts)
+    .where("invoice_id = #{invoice_id} and invoice_items.quantity >= discounts.threshold")
+    .select('discounts.*,
+      invoice_items.item_id,
+      max(quantity * invoice_items.unit_price * discounts.percent / 100)
+      as savings')
+    .group('invoice_items.id, discounts.id')
+  end
+
+  def discounted_invoice_revenue(invoice_id)
+    discounts = Hash.new(0)
+
+    discount_data(invoice_id).each do |data|
+      if data.savings > discounts[data.item_id]
+        discounts[data.item_id] = data.savings.to_f
+      end
+    end
+
+    invoice_revenue(invoice_id) - discounts.values.sum
+  end
+
 end
