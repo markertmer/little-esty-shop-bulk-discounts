@@ -121,7 +121,7 @@ RSpec.describe 'Merchant Invoice Show Page:', type: :feature do
     expect(page).to have_content("Merchant Amount Due after bulk discounts: $1080")
   end
 
-  xit 'gives links to each applied discount' do
+  it 'gives links to each applied discount' do
     merchant1 = Merchant.create!(name: "The Tornado", status: 1)
     discount1 = merchant1.discounts.create!(name: "For God", percent: 10, threshold: 5)
     discount2 = merchant1.discounts.create!(name: "For Gary", percent: 20, threshold: 10)
@@ -130,18 +130,20 @@ RSpec.describe 'Merchant Invoice Show Page:', type: :feature do
     customer1 = Customer.create!(first_name: "Marky", last_name: "Mark")
     invoice1 = customer1.invoices.create!(status: 0)
     # neither item meets threshold
-    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
-    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 4, unit_price: 70, status: 0)
+    ii1 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 2, unit_price: 120, status: 0)
+    ii2 = InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 4, unit_price: 70, status: 0)
     visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
     expect(page).to_not have_content(discount1.name)
     expect(page).to_not have_content(discount2.name)
     # item 1 meets discount 1 threshold
-    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
+    ii1.update(quantity: 5)
+    # InvoiceItem.create!(invoice_id: invoice1.id, item_id: item1.id, quantity: 3, unit_price: 120, status: 0)
     visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
     expect(page).to have_content(discount1.name)
     expect(page).to_not have_content(discount2.name)
     # item 2 exceeds discount 2 threshold
-    InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 10, unit_price: 70, status: 0)
+    ii2.update(quantity: 14)
+    # InvoiceItem.create!(invoice_id: invoice1.id, item_id: item2.id, quantity: 10, unit_price: 70, status: 0)
     visit "/merchants/#{merchant1.id}/invoices/#{invoice1.id}"
     expect(page).to have_content(discount1.name)
     expect(page).to have_content(discount2.name)
