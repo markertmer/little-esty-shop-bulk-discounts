@@ -25,7 +25,7 @@ class Invoice < ApplicationRecord
   end
 
   def discounted_revenue
-    self.merchants.sum do |merchant|
+    self.merchants.uniq.sum do |merchant|
       merchant.discounted_invoice_revenue(self.id)
     end
   end
