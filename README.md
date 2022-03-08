@@ -1,4 +1,10 @@
-# Little Esty Shop
+# Little Esty Shop / Bulk Discounts Project
+
+## Mark's Notes
+- Deployed [here](https://lil-esty-bulk-discounts.herokuapp.com/)
+- All required user stories have been completed.
+- No extensions were attempted.
+- I will be working on my AR/SQL chops!
 
 ## Background and Description
 
