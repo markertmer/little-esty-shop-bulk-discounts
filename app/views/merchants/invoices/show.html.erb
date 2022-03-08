@@ -24,4 +24,8 @@
 <h3>Invoice Total: $<%= "#{@invoice.total_revenue}" %></h3>
 <h3>Merchant Total: $<%= @merchant.invoice_revenue(@invoice.id) %></h3>
 <h3>Merchant Amount Due after bulk discounts: $<%= @merchant.discounted_invoice_revenue(@invoice.id) %></h3>
-  </div>
+<br>
+<h3>Applied Discounts</h3>
+<% @discounts.each do |discount| %>
+<li id="discount-<%= discount.id %>"><%= link_to discount.name, "/merchants/#{@merchant.id}/discounts/#{discount.id}" %></li>
+<% end %>
