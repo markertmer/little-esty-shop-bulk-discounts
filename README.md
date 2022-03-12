@@ -15,9 +15,16 @@ The application is built to meet the needs of a hypothetical sales platform, whe
 The involved resources consist of a many:many and several one:many relationships. PostgreSQL was the chosen database manager, and ActiveRecord was used for querying within Rails.
 
 ## Admin Capabilities
--View a Dashboard showing the top 5 
+- Dashboard shows the top 5 customers based on number of successful transactions.
+- Dashboard shows a list of all incompleted invoices, each with a link to that invoice's show page, sorted by oldest first
+- Admin Merchants index shows the top 5 merchants based on total revenue earned, and that amount is listed along with the merchant's highest-earning day.
+- Admin Merchants index shows lists of Active and Inactive merchants, with links to each merchant's show page.
+- Each listing has a button to enable or disable the merchant, depending on its current status.
+- Admins can create new merchants and update existing ones.
 
 ## Merchant Capabilities
+- Admin Invoices index lists all invoices, along with the order status and a link to that invoice's show page.
+- Admin Invoices show page lists customer info, lists the items ordered, and displays the order subtotalkljyhl;kjhl;kjh;kjh
 
 ## Bulk Discounts
 
@@ -32,6 +39,8 @@ While the project focuses on CRUD functionality and advanced database querying, 
 ## Bootstrap
 
 ## Test-Driven Design
+
+## CSV Data Loading
 
 
 ## Mark's Notes
