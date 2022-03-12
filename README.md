@@ -30,9 +30,9 @@ The involved resources consist of a many:many and several nested one:many relati
 
 ## Admin Capabilities
 - Dashboard
-   <img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030863-0f4c5e65-1b11-4d9b-9f74-98563a3799c8.png">
    - See the top 5 customers based on number of successful transactions.
    - See a list of all incompleted invoices, each with a link to that invoice's show page, sorted by oldest first
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030863-0f4c5e65-1b11-4d9b-9f74-98563a3799c8.png">
 - Merchants Index 
    - See the top 5 merchants based on total revenue earned, and that amount is listed along with the merchant's highest-earning day.
    - See lists of Active and Inactive merchants, with links to each merchant's show page.
@@ -62,18 +62,18 @@ The involved resources consist of a many:many and several nested one:many relati
 - Invoice Show
    - See the attributes for the invoice and each item ordered, and displays the order subtotal and final revenue with any applied discounts.
    - Update each invoice item's status with dropdown menu and button.
-   <img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030835-c9e776ee-71b1-4e41-890b-45ae4e271f28.png">
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030835-c9e776ee-71b1-4e41-890b-45ae4e271f28.png">
 
 
 ## Bulk Discounts
 Additional functionality was added to give merchants the ability to offer quantity-based discounts on any of their items. The discount resource conists of a name, the percentage taken off the original price, and the quantity threshold that specifies how many of one item must be purchased for the discount to apply. In the case of multiple discounts applying, the application will choose the best deal for the customer by default.
 
 - Bulk Discounts Index 
-   <img width="400" alt="bulk-discounts-index" src="https://user-images.githubusercontent.com/91342410/158030967-c0cd1472-37c8-4676-9dea-8885b1490af9.png">
    - See all available discounts along with their percentage and threshold.
    - Delete discounts by clicking on a button.
    - See the next three upcoming holidays. [More info on this below]()
    - Includes links to each discount's show page
+<img width="400" alt="bulk-discounts-index" src="https://user-images.githubusercontent.com/91342410/158030967-c0cd1472-37c8-4676-9dea-8885b1490af9.png">
 - Bulk Discounts Show
    - See all discount attributes.
 - Create new discounts, and update and delete existing ones.
