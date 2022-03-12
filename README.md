@@ -63,8 +63,8 @@ The involved resources consist of a many:many and several nested one:many relati
 - Invoice Show
    - See the attributes for the invoice and each item ordered, and displays the order subtotal and final revenue with any applied discounts.
    - Update each invoice item's status with dropdown menu and button.
-<img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030835-c9e776ee-71b1-4e41-890b-45ae4e271f28.png">
 
+<img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030835-c9e776ee-71b1-4e41-890b-45ae4e271f28.png">
 
 ## Bulk Discounts
 Additional functionality was added to give merchants the ability to offer quantity-based discounts on any of their items. The discount resource conists of a name, the percentage taken off the original price, and the quantity threshold that specifies how many of one item must be purchased for the discount to apply. In the case of multiple discounts applying, the application will choose the best deal for the customer by default.
