@@ -44,7 +44,7 @@ The involved resources consist of a many:many and several nested one:many relati
    - See the attributes for the invoice and each item ordered, and displays the order subtotal and final revenue with any applied discounts.
    - Update the invoice status with dropdown menu and button.
 - Create new merchants and update existing ones.
-   <img width="400" alt="edit-merchant-view" src="https://user-images.githubusercontent.com/91342410/158030899-9a1baf96-14fa-4937-b177-8448285c047e.png">
+<img width="400" alt="edit-merchant-view" src="https://user-images.githubusercontent.com/91342410/158030899-9a1baf96-14fa-4937-b177-8448285c047e.png">
 
 
 ## Merchant Capabilities
