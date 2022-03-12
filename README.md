@@ -1,19 +1,29 @@
-# Little Esty Shop / Bulk Discounts Project
+# Little "Esty" Shop / Bulk Discounts Project
 
 This is a RESTful application built on Rails to meet the requirements of the [Little Etsy Shop](https://github.com/turingschool-examples/little-esty-shop) group project and [Bulk Discounts](https://backend.turing.edu/module2/projects/bulk_discounts) solo project for Module 2 of the Back End Engineering program at [Turing School of Software and Software and Design](https://turing.edu/). The first part was completed by 2111 cohort members Mark Ertmer, Katy Harrod and Joseph Galvin. Mark completed the Bulk Discounts portion by building onto the exisiting repository. This project was completed in March of 2022.
 
-[View the deployed application here](https://lil-esty-bulk-discounts.herokuapp.com/)
+[VIEW THE DEPLOYED APPLICATION HERE](https://lil-esty-bulk-discounts.herokuapp.com/)
 
 ## Table of Contents
+* [Purpose and Functionality](#purpose-and-functionality)
+* [Database Structure and Interface](#database-structure-and-interface)
+* [Admin Capabilities](#admin-capabilities)
+* [Merchant Capabilities](#merchant-capabilities)
+* [Bulk Discounts](#bulk-discounts)
+* [API Consumption](#api-consumption)
+* [Heroku Deployment and Git Workflow](#heroku-deployment-and-git-workflow)
+* [Test-Driven Development](#test-driven-development)
+* [CSV Data Loading](#csv-data-loading)
+* [Data Validation and Sad Path Testing](#data-validation-and-sad-path-testing)
 
 ## Purpose and Functionality
-The application is built to meet the needs of a hypothetical sales platform, wherin merchants can sell items to customers, view invoices, manage transactions and offer discounts. CRUD functionality is at the heart of this application, allowing both merchants and admin to create, read, update and delete a number of the resources based on different sets of available features. The learning goals of the project are as follows:
+The application is built to meet the needs of a hypothetical sales platform, wherin merchants can sell items to customers, view invoices, manage transactions and offer discounts. CRUD functionality is at the heart of this application, allowing both merchants and admin to create, read, update and delete a number of the resources based on different sets of available features. The learning goals of the project were given as follows:
 - Practice designing a normalized database schema and defining model relationships
 - Utilize advanced routing techniques including namespacing to organize and group like functionality together.
 - Utilize advanced active record techniques to perform complex database queries
 - Practice consuming a public API while utilizing POROs as a way to apply OOP principles to organize code
 
-## Database Structure & Interface
+## Database Structure and Interface
 ![image](https://user-images.githubusercontent.com/91342410/157998299-cc32d2fe-3436-47ab-ab12-26c99e0c6b85.png)
 
 The involved resources consist of a many:many and several nested one:many relationships. PostgreSQL was the chosen database manager, and ActiveRecord was used for querying within Rails.
@@ -65,10 +75,10 @@ Additional functionality was added to give merchants the ability to offer quanti
 - Applied discounts are also listed on the Merchant Invoice Show pages.
 
 ## API Consumption
-While the project focuses on CRUD functionality and advanced database querying, it did offer an opportunity to learn how to consume the [API]() in order to display the next 3 upcoming holidays on a merchant's Bulk Discounts Index page:
+While the project focuses on CRUD functionality and advanced database querying, it did offer an opportunity to learn how to consume the [Nager.Date API](https://date.nager.at/swagger/index.html) in order to display the next 3 upcoming holidays from the current date on a merchant's Bulk Discounts Index page:
 <img width="292" alt="image" src="https://user-images.githubusercontent.com/91342410/157999907-d629d22e-112c-4622-af62-313e291bffd2.png">
 
-## Heroku Deployment & Git Workflow
+## Heroku Deployment and Git Workflow
 The repository was connected to Heroku in such a way that any code merged into the `main` branch would be automatically deployed. This gave us the opportunity to practice staging our code on a separate branch, called `developer`, before moving it into production. This is the process we followed:
 
 1. To update your machine, run `git fetch`. 
@@ -98,7 +108,7 @@ The project consists of 84 feature tests and 81 model tests, all passing with 10
 ## CSV Data Loading
 As this is a hypothetical application, there was a need to populate the database with sample data for customers, invoices, invoice items, items, merchants, transactions and discounts. These were provided in CSV files, which we were able to load after building a `rake` command using namespacing for each resource and a `csv_load:all` command for all data. This was done locally on each teammate's machine as well as on the Heroku app so that the data could be used on the live deployment. 
 
-## Data Validation & Sad Path Testing
+## Data Validation and Sad Path Testing
 While there is plenty of valid data in the development database for this project, it also needed measures to ensure that live users could not break anything by entering invalid data. Validations were incorporated across into each model where resources could be created or updated by a user, including the following conditions:
 - Presence: resources cannot be created or updated with a blank form field.
 - Numericality: strings cannot be entered when a number is expected.
