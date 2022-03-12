@@ -12,7 +12,7 @@ The application is built to meet the needs of a hypothetical sales platform, whe
 ## Database Structure & Interface
 ![image](https://user-images.githubusercontent.com/91342410/157998299-cc32d2fe-3436-47ab-ab12-26c99e0c6b85.png)
 
-The involved resources consist of a many:many and several one:many relationships. PostgreSQL was the chosen database manager, and ActiveRecord was used for querying within Rails.
+The involved resources consist of a many:many and several nested one:many relationships. PostgreSQL was the chosen database manager, and ActiveRecord was used for querying within Rails.
 
 ## Admin Capabilities
 - Dashboard
