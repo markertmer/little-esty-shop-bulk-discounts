@@ -1,6 +1,6 @@
 # Little "Esty" Shop / Bulk Discounts Project
 
-This is a RESTful application built on Rails to meet the requirements of the [Little Etsy Shop](https://github.com/turingschool-examples/little-esty-shop) group project and [Bulk Discounts](https://backend.turing.edu/module2/projects/bulk_discounts) solo project for Module 2 of the Back End Engineering program at [Turing School of Software and Software and Design](https://turing.edu/). The first part was completed by 2111 cohort members Mark Ertmer, Katy Harrod and Joseph Galvin. Mark completed the Bulk Discounts portion by building onto the exisiting repository. This project was completed in March of 2022.
+This is a RESTful application built on Rails to meet the requirements of the [Little Esty Shop](https://github.com/turingschool-examples/little-esty-shop) group project and [Bulk Discounts](https://backend.turing.edu/module2/projects/bulk_discounts) solo project for Module 2 of the Back End Engineering program at [Turing School of Software and Software and Design](https://turing.edu/). The first part was completed by 2111 cohort members Mark Ertmer, Katy Harrod and Joseph Galvin. Mark completed the Bulk Discounts portion by building onto the exisiting repository. This project was completed in March of 2022.
 
 [VIEW THE DEPLOYED APPLICATION HERE](https://lil-esty-bulk-discounts.herokuapp.com/)
 
