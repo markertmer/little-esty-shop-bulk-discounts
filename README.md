@@ -1,5 +1,9 @@
 # Little Esty Shop / Bulk Discounts Project
 
+
+![image](https://user-images.githubusercontent.com/91342410/157998299-cc32d2fe-3436-47ab-ab12-26c99e0c6b85.png)
+
+
 ## Mark's Notes
 - Deployed [here](https://lil-esty-bulk-discounts.herokuapp.com/)
 - All required user stories have been completed.
