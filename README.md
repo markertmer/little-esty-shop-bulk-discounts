@@ -67,7 +67,7 @@ The involved resources consist of a many:many and several nested one:many relati
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/91342410/158030835-c9e776ee-71b1-4e41-890b-45ae4e271f28.png">
 
 ## Bulk Discounts
-Additional functionality was added to give merchants the ability to offer quantity-based discounts on any of their items. The discount resource conists of a name, the percentage taken off the original price, and the quantity threshold that specifies how many of one item must be purchased for the discount to apply. In the case of multiple discounts applying, the application will choose the best deal for the customer by default.
+Additional functionality was added to give merchants the ability to offer quantity-based discounts on any of their items. The discount resource consists of a name, the percentage taken off the original price, and the quantity threshold that specifies how many of one item must be purchased for the discount to apply. In the case of multiple discounts applying, the application will choose the best deal for the customer by default.
 
 - Bulk Discounts Index 
    - See all available discounts along with their percentage and threshold.
